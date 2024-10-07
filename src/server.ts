@@ -1,29 +1,26 @@
 import express from "express";
 import dotenv from "dotenv";
-import mongoose from "mongoose";
 import { errorHandler } from "./middleware/errorMiddleware";
 import userRoutes from "./routes/userRoutes";
+import { connectToMongo } from "./DAL/database"
 
 const app = express();
 const PORT = process.env.PORT || 8000;
 
 dotenv.config();
+
+// -- connect to mongo
+connectToMongo();
 // Middleware:
 
 // -- body-parser:
 app.use(express.json());
 
 // -- error-handler:
-app.use(errorHandler);
+//app.use(errorHandler);
 
 // -- routes:
-app.use('api/users', userRoutes);
-
-// -- connect to mongo
-mongoose.connect(process.env.MONGODB_URI as string)
-.then(() => console.log("connected to mongo"))
-.catch((error) => console.error(error));
-
+app.use('/api/users', userRoutes);
 
 app.listen(PORT, () => {
     try {
